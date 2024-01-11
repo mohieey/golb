@@ -1,12 +1,14 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net"
 	"net/http"
 	"net/url"
+	"os"
 	"time"
+
+	"gopkg.in/yaml.v3"
 )
 
 func GetRetryFromContext(r *http.Request) int {
@@ -48,7 +50,6 @@ func healthCheck() {
 
 func lb(w http.ResponseWriter, r *http.Request) {
 	attempts := GetAttemptsFromContext(r)
-	fmt.Println("attempts: ", attempts)
 	if attempts > 3 {
 		log.Printf("%s(%s) Max attempts reached, terminating\n", r.RemoteAddr, r.URL.Path)
 		http.Error(w, "Service not available", http.StatusServiceUnavailable)
@@ -56,10 +57,27 @@ func lb(w http.ResponseWriter, r *http.Request) {
 	}
 
 	peer := nodesPool.GetNextPeer()
-	fmt.Println(peer.URL.Host)
 	if peer != nil {
 		peer.ReverseProxy.ServeHTTP(w, r)
 		return
 	}
 	http.Error(w, "Service not available", http.StatusServiceUnavailable)
 }
+
+type Configs struct {
+	Port  string
+	Nodes []string
+}
+
+func (c *Configs) load(configsFilename string) {
+	configsFile, err := os.ReadFile(configsFilename)
+	if err != nil {
+		panic(err)
+	}
+	err = yaml.Unmarshal(configsFile, &c)
+	if err != nil {
+		panic(err)
+	}
+}
+
+type HealthCheck int
