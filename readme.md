@@ -1,8 +1,8 @@
-# lbgo: Round Robin Load Balancer in Go
+# golb: Round Robin Load Balancer in Go
 
 ## Overview
 
-`lbgo` is a lightweight Round Robin Load Balancer implemented in Go. It is designed to distribute incoming network traffic across multiple backend servers in a circular manner, ensuring a balanced workload.
+`golb` is a lightweight Round Robin Load Balancer implemented in Go. It is designed to distribute incoming network traffic across multiple backend servers in a circular manner, ensuring a balanced workload.
 
 ## Features
 
@@ -16,23 +16,23 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/mohieey/lbgo.git
+git clone https://github.com/mohieey/golb.git
 
 # Navigate to the project directory
-cd lbgo
+cd golb
 
 # Build the project
 go build .
 
 # Run!
-./lbgo
+./golb
 ```
 
 ### Configuring the load balancer
 
 - A file named configs.yaml should be in the same path with the project binary,
   to provide a file with different name, the run command will be like this
-  `./lbgo -configs <filename>`
+  `./golb -configs <filename>`
 
 - configs file example:
 

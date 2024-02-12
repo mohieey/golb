@@ -1,4 +1,4 @@
-module lbgo
+module golb
 
 go 1.21.5
 
